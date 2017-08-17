@@ -19,7 +19,6 @@ import codecs
 import cPickle
 import pickle
 from gensim import matutils
-import lasagne
 
 import vocabUtils
 
@@ -72,16 +71,6 @@ class wordEmbeddings:
       return None if iIndex is None else self.npaWordEmbeddings_units[iIndex] 
     except KeyError:
       return None
-    
-  def getRandomEmbedding(self, sWord):
-    try:
-      return self.dRandomEmbeddings[sWord]
-    except KeyError:
-      self.dRandomEmbeddings[sWord] = \
-          lasagne.init.Normal().sample((1,
-                                        self.npaWordEmbeddings.shape[1])
-                                       )[0]
-      return self.dRandomEmbeddings[sWord]
 
   def getAggregate(self, aTokens):
     if self.bDebug:
@@ -94,7 +83,7 @@ class wordEmbeddings:
     for sToken in aTokens:
       npaWordEmbedding = self[sToken]
       if (npaWordEmbedding is None) and (not self.bUnknownOmit):
-        npaWordEmbedding = self.getRandomEmbedding(sToken)
+        continue # NOTE: removed random embedding assignment from original code to reduce lasagne dependency
 
       if npaWordEmbedding is not None:
         npaV += npaWordEmbedding
