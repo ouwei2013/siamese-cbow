@@ -13,7 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations
 under the License.
 '''
-
+from __future__ import print_function
 import codecs
 import numpy as np
 import sys
@@ -53,16 +53,14 @@ class vocabulary:
               sWord, sFreq = sLine.strip().split(' ')
   
             if sWord in self.dVocab:
-              print >>sys.stderr, \
-                "[WARNING]: word '%s' is already in" % sWord
+              print("[WARNING]: word '%s' is already in" % sWord, file=sys.stderr)
             else:
               self.dVocab[sWord] = iIndex
               self.dIndex2word[iIndex] = sWord
               iIndex += 1
           except ValueError:
             sLine = sLine[:-1] if sLine.endswith("\n") else sLine
-            print >>sys.stderr, \
-                "[WARNING]: error in line %d: '%s'" % (iLineNr, sLine)
+            print("[WARNING]: error in line %d: '%s'" % (iLineNr, sLine), file=sys.stderr)
         else:
           break
       
@@ -76,8 +74,7 @@ class vocabulary:
     iIndex = 1     
     for sWord in aWordList:
       if sWord in self.dVocab:
-        print >>sys.stderr, \
-            "[WARNING]: word '%s' is already in" % sWord
+        print("[WARNING]: word '%s' is already in" % sWord, file=sys.stderr)
       else:
         self.dVocab[sWord] = iIndex
         self.dIndex2word[iIndex] = sWord
@@ -109,7 +106,7 @@ class vocabulary:
 
   def write(self):
     for iIndex in range(1, self.iNrOfWords):
-      print "[%d] %s" % (iIndex, self.index2word(iIndex))
+      print("[%d] %s" % (iIndex, self.index2word(iIndex)), file=sys.stderr)
 
 if __name__ == "__main__":
   import argparse
@@ -132,4 +129,4 @@ if __name__ == "__main__":
                       sInputMode=oArgs.sInputMode)
 
   for i in range(10):
-    print "%s: %d" % (oVocab.dIndex2word[i], i)
+    print("%s: %d" % (oVocab.dIndex2word[i], i), file=sys.stderr)

@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and limitations
 under the License.
 '''
 
+from __future__ import print_function
 import numpy as np
 import codecs
-import cPickle
 import pickle
 from gensim import matutils
 
@@ -38,15 +38,13 @@ class wordEmbeddings:
       self.dRandomEmbeddings = {}
 
     if sAggregation not in ['average', 'sum']:
-      print >>sys.stderr, \
-          "[ERROR] Don't know aggregation method '%s'. Typo?" % sAggregation
+      print("[ERROR] Don't know aggregation method '%s'. Typo?" % sAggregation, file=sys.stderr)
       exit(1)
     self.sAggregation = sAggregation
 
     if sPickleFile is not None:
-      fhFile = open(sPickleFile, mode='rb')
-      dDict = cPickle.load(fhFile)
-      fhFile.close()
+      with open(sPickleFile, mode='rb') as fhFile:
+        dDict = pickle.load(fhFile)
 
     self.oArgs = dDict["oArgs"]
     self.npaWordEmbeddings = dDict["npaWordEmbeddings"]
@@ -158,7 +156,7 @@ class wordEmbeddings:
       aIndexRange = range(1, self.oVocab.iNrOfWords)
 
     for iIndex in aIndexRange:
-      print "[%d] %s: %s" % \
+      print("[%d] %s: %s" % \
           (iIndex, self.oVocab.index2word(iIndex),
            ', '.join(["%s (%f)" % x for x in self.most_similar(self.oVocab.index2word(iIndex), fMinDist=fMinDist)] )
-           )
+           ))
